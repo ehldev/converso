@@ -48,6 +48,12 @@ export default {
         this.isRunning = true
         this.timer = setInterval(() => {
           this.time++
+
+          // Cuando llega a 60 segundos
+          if (this.time === 60) {
+            this.$emit("finished")
+            this.pause() // opcional: detiene el cronómetro
+          }
         }, 1000)
       }
     },
@@ -66,5 +72,3 @@ export default {
   }
 }
 </script>
-
-<!-- Sin estilos CSS adicionales: todo con clases Tailwind -->
