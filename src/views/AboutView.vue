@@ -21,19 +21,19 @@
       :class="isReady ? 'h-[calc(100vh-100px)]' : 'h-full'">
       <section v-if="!isReady" class="max-w-5xl mx-auto px-6 lg:px-10">
         <img src="@/assets/images/layout/logo-blanco.png" alt="Converso - Apoyo emocional instantáneo"
-          class="w-[220px] mx-auto">
+          class="w-[200px] mx-auto">
 
-        <div class="text-center my-6">
-          <h1 class="text-4xl text-white font-bold mb-4">¡Prepárate para tu sesión!</h1>
-          <p class="text-lg text-white/80">
+        <div class="text-center mt-6">
+          <h1 class="text-[24px] md:text-4xl text-white font-bold">¡Prepárate para tu sesión!</h1>
+          <p class="text-lg text-white/80 my-0">
             Sigue estas recomendaciones para sacar el máximo provecho de tu conversación.
           </p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-10 items-start mt-10">
+        <div class="grid md:grid-cols-2 gap-3 items-start mt-6">
           <!-- Tips izq -->
-          <div class="space-y-6">
-            <div class="bg-secondary/10 rounded-2xl p-5 flex items-start gap-4 shadow-md">
+          <div class="space-y-3">
+            <div class="bg-secondary/10 rounded-2xl p-3 md:p-5 flex items-start gap-4 shadow-md">
               <i class="ri-mic-line text-3xl text-primary font-bold"></i>
               <div>
                 <h3 class="text-xl text-white font-bold">Habla con claridad</h3>
@@ -42,7 +42,7 @@
                 </p>
               </div>
             </div>
-            <div class="bg-secondary/10 rounded-2xl p-5 flex items-start gap-4 shadow-md">
+            <div class="bg-secondary/10 rounded-2xl p-3 md:p-5 flex items-start gap-4 shadow-md">
               <i class="ri-user-heart-line text-3xl text-primary font-bold"></i>
               <div>
                 <h3 class="text-xl text-white font-bold">Mantén la calma</h3>
@@ -53,8 +53,8 @@
             </div>
           </div>
           <!-- Tips der -->
-          <div class="space-y-6">
-            <div class="bg-secondary/10 rounded-2xl p-5 flex items-start gap-4 shadow-md">
+          <div>
+            <div class="bg-secondary/10 rounded-2xl p-3 md:p-5 flex items-start gap-4 shadow-md">
               <i class="ri-lightbulb-flash-line text-3xl text-primary font-bold"></i>
               <div>
                 <h3 class="text-xl text-white font-bold">Sé creativo</h3>
@@ -76,10 +76,10 @@
         </div>
 
         <!-- Botón continuar -->
-        <div class="mt-12 md:mt-8" @click="isReady = true">
+        <div class="mt-8 md:mt-8" @click="isReadyAction()">
           <button
-            class="w-full bg-gradient-to-br from-[rgba(53,73,94,0.8)] to-[rgba(0,191,166,0.8)] flex justify-center items-center max-w-[220px] h-12 mx-auto uppercase rounded-[14px] text-white font-medium shadow-[0_10px_20px_rgba(16,185,129,.35)] active:scale-[.99] transition">
-            Estoy listo
+            class="w-full text-[14px] bg-gradient-to-br from-[rgba(53,73,94,0.8)] to-[rgba(0,191,166,0.8)] flex justify-center items-center max-w-[240px] h-12 mx-auto uppercase rounded-[14px] text-white font-medium shadow-[0_10px_20px_rgba(16,185,129,.35)] active:scale-[.99] transition">
+            Iniciar conversación
             <i class="ri-arrow-right-up-line ml-2"></i>
           </button>
         </div>
@@ -97,7 +97,7 @@
           <!-- Botones -->
           <div class="absolute bottom-[-20px] left-1/2 -translate-x-1/2 flex gap-4 z-10">
             <!-- Llamar -->
-            <button :disabled="connected" @click="startAgent"
+            <button :disabled="loading || connected" @click="startAgent"
               class="w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center shadow-lg disabled:opacity-50">
               <i class="ri-phone-line text-lg"></i>
             </button>
@@ -110,7 +110,11 @@
           </div>
         </div>
 
+        <p class="mt-4 font-semibold" v-if="loading">Un momento, conectando...</p>
+
         <p class="mt-4 font-semibold" v-if="connected">Empieza a hablar para empezar la conversación...</p>
+
+        <p v-if="errorMessage" class="text-red-400">{{ errorMessage }}</p>
 
         <!-- Sugerencia de respuesta -->
         <!-- <div class="bg-indigo-800/40 border border-white/10 rounded-xl p-6 max-w-xl w-full shadow-md">
@@ -125,9 +129,6 @@
             {{ suggestion }}
           </p>
         </div> -->
-
-        <!-- Error -->
-        <p v-if="errorMessage" class="text-red-400">{{ errorMessage }}</p>
       </section>
 
       <Cronometro v-if="showCronometro" />
@@ -146,6 +147,7 @@ const suggestion = ref('');
 const isReady = ref(false);
 const connected = ref(false);
 const showCronometro = ref(false);
+const loading = ref(false);
 
 let mathTutorAgent = new RealtimeAgent({
   name: 'Math Tutor',
@@ -231,6 +233,7 @@ const onAgentEnd = async (_runContext, _agentInfo, text) => {
 
 // 5. Función para iniciar la sesión y suscribir el listener
 const startAgent = async () => {
+  loading.value = true;
   errorMessage.value = ''; suggestion.value = '';
 
   let token = await getInitialToken();
@@ -246,6 +249,8 @@ const startAgent = async () => {
   } catch (err) {
     errorMessage.value = 'Error al conectar: ' + err.message;
     console.error(err);
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -255,6 +260,11 @@ const stopAgent = () => {
   session.close();
   connected.value = false;
 };
+
+const isReadyAction = () => {
+  startAgent();
+  isReady.value = true;
+}
 </script>
 
 <style>

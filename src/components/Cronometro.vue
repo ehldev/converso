@@ -1,11 +1,22 @@
 <template>
-  <div class="stopwatch absolute bottom-0 right-0">
-    <h2>Cronómetro</h2>
-    <p class="time">{{ formattedTime }}</p>
-    <div class="controls">
-      <button @click="start" :disabled="isRunning">Iniciar</button>
-      <button @click="pause" :disabled="!isRunning">Pausar</button>
-      <button @click="reset">Reiniciar</button>
+  <div
+    class="stopwatch absolute bottom-6 right-6 select-none"
+    aria-label="Cronómetro"
+  >
+    <div
+      class="flex items-center gap-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/60 dark:border-slate-700/60 shadow-lg rounded-2xl pl-4 pr-3 py-3"
+    >
+      <!-- Etiqueta -->
+      <span class="text-xs font-semibold tracking-wide text-slate-600 dark:text-slate-300 uppercase">
+        Cronómetro
+      </span>
+
+      <!-- Tiempo -->
+      <span
+        class="text-3xl font-mono tabular-nums font-bold text-slate-900 dark:text-white tracking-tight px-3 py-1 rounded-lg bg-slate-100/80 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700"
+      >
+        {{ formattedTime }}
+      </span>
     </div>
   </div>
 </template>
@@ -56,26 +67,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.stopwatch {
-  text-align: center;
-  font-family: Arial, sans-serif;
-}
-.time {
-  font-size: 2rem;
-  margin: 10px 0;
-}
-.controls button {
-  margin: 0 5px;
-  padding: 6px 12px;
-  border: none;
-  background: #365EFF;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.controls button:disabled {
-  background: #999;
-  cursor: not-allowed;
-}
-</style>
+<!-- Sin estilos CSS adicionales: todo con clases Tailwind -->
