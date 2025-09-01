@@ -19,9 +19,9 @@
     <!-- Recomendaciones previas -->
     <div class="animate__animated animate__fadeInRight flex flex-column justify-center items-center"
       :class="isReady ? 'h-[calc(100vh-100px)]' : 'h-full'">
-      <section v-if="!isReady" class="max-w-5xl mx-auto pt-12 pb-16 px-6 lg:px-10">
+      <section v-if="!isReady" class="max-w-5xl mx-auto px-6 lg:px-10">
         <img src="@/assets/images/layout/logo-blanco.png" alt="Converso - Apoyo emocional instantáneo"
-          class="w-60 mx-auto">
+          class="w-[220px] mx-auto">
 
         <div class="text-center my-6">
           <h1 class="text-4xl text-white font-bold mb-4">¡Prepárate para tu sesión!</h1>
