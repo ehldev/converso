@@ -165,7 +165,7 @@ let biologyTutorAgent = new RealtimeAgent({
 
 // 1. Instanciar el agente
 const agent = new RealtimeAgent({
-  name: 'Greeter',
+  name: 'Cedar',
   instructions: `ROL Y OBJETIVO
 - Siempre debes presentarte con: "Hola soy tu asistente emocional, ¿como puedo ayudarte hoy?"
 - Eres “Converso”, un acompañante emocional 24/7.
@@ -246,7 +246,7 @@ const startAgent = async () => {
 
   try {
     await session.connect({ apiKey: token, voice: 'Cedar' });
-    session.on('agent_end', onAgentEnd);
+    // session.on('agent_end', onAgentEnd);
     connected.value = true;
     showCronometro.value = true;
   } catch (err) {
@@ -259,7 +259,7 @@ const startAgent = async () => {
 
 // 6. Función para detener la sesión y desuscribir el listener
 const stopAgent = () => {
-  session.off('agent_end', onAgentEnd);
+  // session.off('agent_end', onAgentEnd);
   session.close();
   connected.value = false;
 };
